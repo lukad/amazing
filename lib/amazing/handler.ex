@@ -28,7 +28,6 @@ defmodule Amazing.Handler do
   @impl ThousandIsland.Handler
   def handle_connection(%Socket{} = socket, _state) do
     # Logger.metadata(connection_id: socket.socket.connection_id)
-    IO.inspect(socket)
     Logger.info("New connection")
     Socket.send(socket, "motd|enter help for instructions\n")
     {:continue, %State{}, {:persistent, @timeout_in_ms}}

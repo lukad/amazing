@@ -73,13 +73,11 @@ defmodule Amazing.Players.Player do
     # Convert the RGB values to hex
     [r, g, b]
     |> Enum.map(&(&1 * 1.0))
-    |> IO.inspect()
     |> Enum.map(&trunc/1)
     |> Enum.map(&Integer.to_string(&1, 16))
     |> Enum.map(&String.pad_leading(&1, 2, "0"))
     |> Enum.join()
     |> String.upcase()
     |> then(&("#" <> &1))
-    |> IO.inspect()
   end
 end
