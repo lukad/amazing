@@ -17,8 +17,7 @@ defmodule AmazingWeb.Router do
   scope "/", AmazingWeb do
     pipe_through :browser
 
-    live "/", CanvasLive
-    live "/svg", MazeLive
+    live "/", MazeLive
   end
 
   # Other scopes may use custom stacks.
