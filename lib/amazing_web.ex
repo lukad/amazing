@@ -38,12 +38,11 @@ defmodule AmazingWeb do
 
   def controller do
     quote do
-      use Phoenix.Controller,
-        formats: [:html, :json],
-        layouts: [html: AmazingWeb.Layouts]
+      use Phoenix.Controller, formats: [:html, :json]
+
+      use Gettext, backend: AmazingWeb.Gettext
 
       import Plug.Conn
-      import AmazingWeb.Gettext
 
       unquote(verified_routes())
     end
@@ -51,9 +50,7 @@ defmodule AmazingWeb do
 
   def live_view do
     quote do
-      use Phoenix.LiveView,
-        layout: {AmazingWeb.Layouts, :app},
-        container: {:div, class: "h-full"}
+      use Phoenix.LiveView
 
       unquote(html_helpers())
     end
@@ -82,14 +79,17 @@ defmodule AmazingWeb do
 
   defp html_helpers do
     quote do
+      # Translation
+      use Gettext, backend: AmazingWeb.Gettext
+
       # HTML escaping functionality
       import Phoenix.HTML
-      # Core UI components and translation
+      # Core UI components
       import AmazingWeb.CoreComponents
-      import AmazingWeb.Gettext
 
-      # Shortcut for generating JS commands
+      # Common modules used in templates
       alias Phoenix.LiveView.JS
+      alias AmazingWeb.Layouts
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())

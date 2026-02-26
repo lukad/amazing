@@ -159,7 +159,7 @@ defmodule Amazing.Handler do
   defp handle("login|" <> args, socket, %State{player: nil} = state) do
     with [name, password] <- String.split(args, "|"),
          %Player{} = player <- Repo.get_by(Player, name: name),
-         {:ok, %Player{} = player} <- Argon2.verify_pass(password, player.password_hash) do
+         true <- Argon2.verify_pass(password, player.password_hash) do
       Socket.send(socket, "Ok\n")
       Logger.metadata(player_id: player.id)
       Logger.info("Player logged in")

@@ -10,20 +10,16 @@ defmodule Amazing.Application do
     port = Application.get_env(:amazing, :port)
 
     children = [
-      # Start the Telemetry supervisor
       AmazingWeb.Telemetry,
-      # Start the Ecto repository
       Amazing.Repo,
-      # Start the PubSub system
+      {DNSCluster, query: Application.get_env(:amazing, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Amazing.PubSub},
-      # Start Finch
-      {Finch, name: Amazing.Finch},
-      # Start the Endpoint (http/https)
-      AmazingWeb.Endpoint,
-      # Start a worker by calling: Amazing.Worker.start_link(arg)
-      # {Amazing.Worker, arg}
+      # Start a worker by calling: FoobarTest.Worker.start_link(arg)
+      # {Amazing.Worker, arg},
       {Amazing.Game, [generator: Amazing.Maze.Generator.RecursiveBacktracking]},
-      {ThousandIsland, port: port, handler_module: Amazing.Handler}
+      {ThousandIsland, port: port, handler_module: Amazing.Handler},
+      # Start to serve requests, typically the last entry
+      AmazingWeb.Endpoint,
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
