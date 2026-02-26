@@ -78,7 +78,7 @@ defmodule Amazing.Maze do
     generator.generate(maze)
   end
 
-  def hide_unrevealed(maze, revealed) do
+  def hide_unrevealed(%Maze{} = maze, revealed) do
     cells =
       maze.cells
       |> Enum.map(fn

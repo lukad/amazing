@@ -17,7 +17,7 @@ defmodule AmazingWeb.CoreComponents do
   use Phoenix.Component
 
   alias Phoenix.LiveView.JS
-  import AmazingWeb.Gettext
+  use Gettext, backend: AmazingWeb.Gettext
 
   @doc """
   Renders a modal.

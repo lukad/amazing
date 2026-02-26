@@ -158,8 +158,8 @@ defmodule Amazing.Handler do
 
   defp handle("login|" <> args, socket, %State{player: nil} = state) do
     with [name, password] <- String.split(args, "|"),
-         player <- Repo.get_by(Player, name: name),
-         {:ok, %Player{} = player} <- Argon2.check_pass(player, password) do
+         %Player{} = player <- Repo.get_by(Player, name: name),
+         {:ok, %Player{} = player} <- Argon2.verify_pass(password, player.password_hash) do
       Socket.send(socket, "Ok\n")
       Logger.metadata(player_id: player.id)
       Logger.info("Player logged in")
@@ -207,7 +207,7 @@ defmodule Amazing.Handler do
     {:continue, state}
   end
 
-  @spec insert_player(binary(), binary()) :: {:ok, Player.t()} | {:error, Changeset.t()}
+  @spec insert_player(binary(), binary()) :: {:ok, Ecto.Schema.t()} | {:error, Changeset.t()}
   defp insert_player(name, password) do
     attrs = %{name: name, password: password, score: 0, color: "red"}
 

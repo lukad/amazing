@@ -49,7 +49,7 @@ defmodule Amazing.Game do
             players: %{integer() => Player.t()},
             maze: Maze.t() | nil,
             revealed: MapSet.t(Maze.coord()),
-            generator: Amazing.Maze.Generator.t(),
+            generator: module(),
             timer: pid(),
             size: {non_neg_integer(), non_neg_integer()},
             tickrate_in_ms: non_neg_integer()
@@ -138,7 +138,7 @@ defmodule Amazing.Game do
   end
 
   @impl GenServer
-  def handle_call({:remove_player, player}, _from, state) do
+  def handle_call({:remove_player, player}, _from, %State{} = state) do
     {removed, players} = Map.pop(state.players, player.id)
     state = %State{state | players: players}
 
@@ -192,7 +192,9 @@ defmodule Amazing.Game do
 
     players =
       state.players
-      |> Enum.map(fn {k, player} -> {k, %Player{player | pos: maze.start, dir: nil}} end)
+      |> Enum.map(fn {k, %Player{} = player} ->
+        {k, %Player{player | pos: maze.start, dir: nil}}
+      end)
       |> Map.new()
 
     Players
